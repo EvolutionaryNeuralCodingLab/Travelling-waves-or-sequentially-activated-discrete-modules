@@ -18,7 +18,7 @@ plotting_config.flip_signal = 0;
 plotting_config.n_reps = 100;
 plotting_config.duplicate_hemisphere = 0;
 plotting_config = fill_missing_configs_with_defaults(plotting_config);
-electrode_grid_name = 'En9';
+electrode_grid_name = 'electrode_grid_for_large_scouts';
 cortex_name = "15002V";
 
 results_filename = '/media/sil2/Data/Yuval O/Rotem Simulations/221204 simulations/large size scouts/multiple bumps/simulation results.mat';

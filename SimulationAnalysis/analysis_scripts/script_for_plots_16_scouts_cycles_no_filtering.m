@@ -18,7 +18,7 @@ plotting_config.flip_signal = 0;
 plotting_config.n_reps = 100;
 plotting_config.duplicate_hemisphere = 1;
 
-electrode_grid_name = 'En7_lr_symmetric';
+electrode_grid_name = 'electrode_grid_for_small_scouts';
 cortex_name = "306716V";
 
 results_filename = '/media/sil2/Data/Yuval O/Rotem Simulations/20230702_RightHemisphereSmallScouts_306716/simulation results.mat';
