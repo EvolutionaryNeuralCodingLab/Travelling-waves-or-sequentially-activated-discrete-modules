@@ -1,0 +1,185 @@
+function [dip_p_value, PLDC] = analyze_single_simulation(signal_source, electrode_set, electrode_grid_for_analysis, source_delta_T, source_delta_X, plotting_config, is_first_temporal, is_first_spatial)
+%ANALYZE_SINGLE_SIMULATION Summary of this function goes here
+%   Detailed explanation goes here
+
+% with_plots, plot_summary, plot_signal, plot_scout_signal, plot_scout_position, percentile, interpolate
+analysis = SimulationAnalysis(signal_source, electrode_set, electrode_grid_for_analysis, source_delta_T, source_delta_X);
+
+%plot 3d coordinates all electrodes
+if (plotting_config(with_plots) || plotting_config(plot_scout_position)) && is_first_temporal
+    f=figure;
+    text(x,y,z, string(1:numel(x)));
+    hold on
+    scout_colors = 'rb';
+    for scout_num=1:n_scouts
+        scout_vertices_inds = row.scouts{1,1}{1,scout_num}.Vertices;
+        %             scout_vertices_locs = cortex_vars.cortex306716V.Vertices(scout_vertices_inds,:);
+        scout_vertices_locs = cortex_vars.cortex.Vertices(scout_vertices_inds,:);
+        scatter3(scout_vertices_locs(:,1),scout_vertices_locs(:,2),scout_vertices_locs(:,3),scout_colors(scout_num),'filled');
+    end
+    % There are two channels situated at the same location: 60,337
+    
+    axis([min(x), max(x), min(y), max(y),min(z), max(z)])
+    xlabel('x')
+    ylabel('y')
+    zlabel('z')
+    title('Elecrode Position (scouts vertices in color) - 3d')
+    saveJpegAndFig(f,save_path,char(files_prefix + "- electode position 3d - Delta_X " + delta_X),1)
+    close(f)
+end
+
+if (with_plots || plot_scout_signal) && delta_X == is_first_spatial
+    f = figure;
+    plot(row.signal{1}')
+    title('Scouts Signals')
+    saveJpegAndFig(f,save_path,char(files_prefix + "- Scouts signal - Delta_T " + delta_T),1)
+    close(f)
+end
+
+simulated_recording_sub = simulated_recording(elecrode_nums,:);
+
+if (with_plots || plot_scout_position) && delta_T == delta_Ts(1)
+    %plot 2d coordinates - subsample
+    f=figure;
+    %         text(x_sub, y_sub, string(1:numel(x_sub)));
+    text(x_sub, y_sub, z_sub, string(elecrode_nums));
+    hold on
+    scout_colors = 'rb';
+    for scout_num=1:n_scouts
+        scout_vertices_inds = row.scouts{1,1}{1,scout_num}.Vertices;
+        %             scout_vertices_locs = cortex_vars.cortex306716V.Vertices(scout_vertices_inds,:);
+        scout_vertices_locs = cortex_vars.cortex.Vertices(scout_vertices_inds,:);
+        scatter3(scout_vertices_locs(:,1),scout_vertices_locs(:,2),scout_vertices_locs(:,3),scout_colors(scout_num),'filled');
+    end
+    axis([min([x_sub; scout_vertices_locs(:,1)]), max([x_sub; scout_vertices_locs(:,1)]), min([y_sub; scout_vertices_locs(:,2)]), max([y_sub; scout_vertices_locs(:,2)]),min([z_sub; scout_vertices_locs(:,3)]), max([z_sub; scout_vertices_locs(:,3)])])
+    xlabel('x')
+    ylabel('y')
+    zlabel('z')
+    title(["Distance " row.distance])
+    saveJpegAndFig(f,save_path,char(files_prefix + "- electode position 3d - subset - Delta_X " + delta_X),1)
+    close(f)
+end
+
+En = reshape(1:length(elecrode_nums),size(electrode_map,1),size(electrode_map,2));
+
+%     HT=hilbert(simulated_recording_sub').';
+%     HTabs=abs(HT);
+%     HTangle=angle(HT);
+%     [crossings,hilbertAmps] = getHilbertCrossings(HTabs,HTangle);
+
+max_peaks = 3;
+all_pks = zeros(size(simulated_recording_sub,1),max_peaks);
+all_locs = all_pks;
+
+for k=1:size(simulated_recording_sub,1)
+    [pks,locs] = findpeaks(simulated_recording_sub(k,:));
+    all_pks(k,1:length(pks)) = pks;
+    all_locs(k,1:length(locs)) = locs;
+end
+
+if percentile
+    x_sub = x(elecrode_nums);
+    y_sub = y(elecrode_nums);
+    z_sub = z(elecrode_nums);
+    all_locs_BU = all_locs;
+    min_locs = quantile(all_locs(:,1),percentile);
+    max_locs = quantile(all_locs(:,1),1-percentile);
+    outliers_inds = find(~(all_locs(:,1)>=max_locs | all_locs(:,1)<=min_locs));
+    all_locs = all_locs(outliers_inds,1);
+    x_sub = x_sub(outliers_inds);
+    y_sub = y_sub(outliers_inds);
+    z_sub = z_sub(outliers_inds);
+end
+
+if with_plots || plot_signal
+    %plot signal
+    f=figure;
+    plot(simulated_recording_sub')
+    colororder(column_colors(electrode_columns,:))
+    lines = findobj(gca,'Type','line');
+    first_line_per_group = lines(1:n_electrode_columns:numel(electrode_columns));
+    hold on
+    scatter(all_locs(:,1),all_pks(:,1),[],column_colors(electrode_columns,:))
+    title('Channel subsample signals')
+    legend(flipud(first_line_per_group),string(1:4))
+    saveJpegAndFig(f,save_path,char(files_prefix + "Signal - first maxima - Delta_T " + delta_T + " Delta_X " + delta_X),1)
+    close(f)
+end
+
+%     if with_plots
+%         %plot signal at half time
+%         [pk,loc1] = findpeaks(row.signal{1}(1,:))
+%         [pk,loc2] = findpeaks(row.signal{1}(2,:));
+%         half_time = round(mean([loc1 loc2]));
+%         startEndWave=[0 1];
+%         [~,f,~] = plotCrossingsPhysical(simulated_recording_sub(:,half_time),startEndWave,flipud(En),zeros(size(all_pks(:,1)))+10,'Units','frames');
+%         end
+
+if with_plots
+    %plot PLM
+    startEndWave=[1 size(simulated_recording_sub,2)]; %twoGausses
+    [~,f,~] = plotCrossingsPhysical(all_locs(:,1),startEndWave,flipud(En),all_pks(:,1),'Units','frames');
+    saveJpegAndFig(f,save_path,char(files_prefix + "Phase Latency Map - First Maxima - With Size - Delta_T " + delta_T + " Delta_X " + delta_X),1)
+    close(f)
+    [~,f,~] = plotCrossingsPhysical(all_locs(:,1),startEndWave,flipud(En),zeros(size(all_pks(:,1)))+30,'Units','frames');
+    saveJpegAndFig(f,save_path,char(files_prefix + "Phase Latency Map - First Maxima - No Size - Delta_T " + delta_T + " Delta_X " + delta_X),1)
+    
+    %         [~,f,~] = plotCrossingsPhysical(crossings{1},startEndWave,flipud(En),hilbertAmps{1},'Units','frames');
+    %         saveJpegAndFig(f,save_path,char(files_prefix + "Phase Latency Map With Size- Delta_T " + delta_T + " Delta_X " + delta_X),1)
+    %         close(f)
+    %         [~,f,~] = plotCrossingsPhysical(crossings{1},startEndWave,flipud(En),[],'Units','frames');
+    %         saveJpegAndFig(f,save_path,char(files_prefix + "Phase Latency Map No Size- Delta_T " + delta_T + " Delta_X " + delta_X),1)
+    close(f)
+end
+
+if interpolate
+    F = scatteredInterpolant([x_sub,y_sub],all_locs(:,1));
+    [xq,yq] = meshgrid(linspace(min(x_sub), max(x_sub),20),linspace(min(y_sub), max(y_sub),20));
+    vq = F(xq,yq);
+    all_locs = vq(:);
+    f=figure;
+    surf(xq,yq,vq)
+    saveJpegAndFig(f,save_path,char(files_prefix + "Phase Latency Map - Interpolated surf - Delta_T " + delta_T + " Delta_X " + delta_X),1)
+    close(f)
+end
+
+phase_space_row = find(delta_Ts==delta_T);
+phase_space_col = find(delta_Xs==delta_X);
+
+%PLDC
+if interpolate
+    cors(phase_space_row,phase_space_col) = corr(xq(:),all_locs(:,1));
+else
+    cors(phase_space_row,phase_space_col) = corr(x_sub,all_locs(:,1));
+end
+
+[dipLFP, dip_p_values(phase_space_row,phase_space_col)] = hartigansdipsigniftest(sort(all_locs(:,1)), 500);
+%         cors(i,j) = corr(x_sub,crossings{1}(:,1));
+%         [dipLFP, dip_p_values(i,j)] = hartigansdipsigniftest(sort(crossings{1}(:,1)), 500);
+t_sanity(phase_space_row,phase_space_col) = delta_T;
+x_sanity(phase_space_row,phase_space_col) = delta_X;
+
+if with_plots
+    f=figure;
+    %         scatter(x_sub,crossings{1}(:,1),'filled')
+    if interpolate
+        scatter(xq(:),all_locs(:,1),'filled')
+    else
+        scatter(x_sub,all_locs(:,1),'filled')
+    end
+    xlabel('x')
+    ylabel('t')
+    title(['PLDC - ' num2str(cors(phase_space_row,phase_space_col))])
+    saveJpegAndFig(f,save_path,char("PLDC - first maxima - Delta_T " + delta_T + " Delta_X " + delta_X),1)
+    close(f)
+    
+    %dip
+    f=figure;
+    
+    histogram(all_locs(:,1),20)
+    title(['DIP p-value: ' num2str(dip_p_values(phase_space_row,phase_space_col))])
+    saveJpegAndFig(f,save_path,char("crossing times hist and dip - first maxima - Delta_T " + delta_T + " Delta_X " + delta_X'),1)
+    close(f)
+end
+end
+
