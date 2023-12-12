@@ -13,7 +13,8 @@ cortex = load_cortex(cortex_name);
 simulation_table = load(path_to_results_table);
 
 %load electrode grid (En)
-electrode_grids_path = '/media/sil2/Data/Yuval O/Rotem Simulations/SimulationAnalysis/spatial_data/elecrode_grids/'; %TODO: move to consts
+base_path = get_analysis_code_base_path();
+electrode_grids_path = [base_path 'spatial_data/elecrode_grids/'];
 electrode_grid_path = [electrode_grids_path,electrode_grid_name,'.txt']; 
 if ~isfile(electrode_grid_path)
     folder_files = dir(electrode_grids_path);
