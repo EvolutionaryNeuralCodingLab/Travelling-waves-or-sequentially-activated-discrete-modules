@@ -22,7 +22,7 @@ plotting_config.pad_samples = 1000;
 plotting_config.n_reps = 100;
 plotting_config.flip_signal = 0;
 
-plotting_config.with_plots = 1; % Plot and save all possible plots. 
+plotting_config.with_plots = 0; % Plot and save all possible plots. 
 % For the following plots, if with_plots is false, you can set specific
 % plots. If with_plots true, they will be plotted even if 0.
 plotting_config.plot_summary = 0; % Just plot the final dip and PLDC phase spaces

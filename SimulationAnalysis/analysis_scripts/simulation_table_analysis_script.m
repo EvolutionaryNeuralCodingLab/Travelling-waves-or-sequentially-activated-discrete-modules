@@ -4,8 +4,8 @@ close all
 %% Load parameters (paths inside)
 
 % Choose relevant params
-small_scouts_no_filtering_params
-% small_scouts_with_filtering_params
+% small_scouts_params
+large_scouts_params
 
 %Channel Positions
 path_to_channel_positions = [get_analysis_code_base_path() 'spatial_data/channel_locations.mat'];
