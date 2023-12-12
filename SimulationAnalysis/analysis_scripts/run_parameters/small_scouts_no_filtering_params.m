@@ -1,5 +1,5 @@
 % Path to simulation table
-results_dir = '/media/sil2/Data/Yuval O/Rotem Simulations/six_large_scouts/';
+results_dir = '/media/sil2/Data/Yuval O/Rotem Simulations/20230702_RightHemisphereSmallScouts_306716/';
 results_filename = 'simulation results.mat';
 path_to_results_table = [results_dir, results_filename];
 
