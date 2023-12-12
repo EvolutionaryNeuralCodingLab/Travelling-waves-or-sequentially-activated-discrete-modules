@@ -36,4 +36,4 @@ dt = 0.2;
 dx = 6;
 
 %for distance calculations
-dxs_for_distance = 1:8;
+dxs_for_distance = 2:8;

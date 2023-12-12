@@ -3,9 +3,9 @@ close all
 
 
 %% Choose relevant params
-large_scouts_params
+% large_scouts_params
 % large_scouts_filtered_params
-% small_scouts_params
+small_scouts_params
 
 %% Load parameters (paths inside)
 
