@@ -24,6 +24,9 @@ classdef ElectrodeSet
             % treated as Hz
             % If pad_samples is provided, it duplicates the start and end
             % pad_samples samples n_dupes times
+            
+            %Fill missing plotting values with defaults
+            plotting_config = fill_missing_configs_with_defaults(plotting_config,get_default_plotting_config());
             if ~isempty(plotting_config.noise_gauss_params)
                 obj.recorded_signal_with_noise = electrode_signals .* ...
                                                  normrnd(plotting_config.noise_gauss_params(1),...
