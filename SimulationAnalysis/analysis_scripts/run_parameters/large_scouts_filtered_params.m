@@ -31,3 +31,7 @@ plotting_config.plot_signal = 0; % Plots and save recorded signals from electrod
 plotting_config.PLDC_summary_scale = [0.85 1];
 plotting_config.plot_source_signal = 0; % Plot and save source signals
 plotting_config.plot_source_position = 0; %P lot and save source positions
+
+% Selected single simulation for figures
+dt = 0.2;
+dx = 4;
