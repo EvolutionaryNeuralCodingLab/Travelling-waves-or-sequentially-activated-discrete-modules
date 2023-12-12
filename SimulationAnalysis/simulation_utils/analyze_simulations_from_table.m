@@ -1,4 +1,4 @@
-function [dip_p_values, PLDCs, phase_space_dT, phase_space_dX] = analyze_simulations_from_table(simulation_table, electrode_channel_poitions, electrode_grid, source_type, sampling_rate, cortex, plotting_config, save_path, files_prefix)
+function [dip_p_values, PLDCs, phase_space_dT, phase_space_dX, delta_Ts, delta_Xs] = analyze_simulations_from_table(simulation_table, electrode_channel_poitions, electrode_grid, source_type, sampling_rate, cortex, plotting_config, save_path, files_prefix)
 %ANALYZE_SIMULATIONS Summary of this function goes here
 %   Both returns and saves metrics!
 

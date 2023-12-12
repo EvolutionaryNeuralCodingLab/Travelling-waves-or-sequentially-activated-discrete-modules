@@ -21,4 +21,4 @@ save_path = ['/media/sil2/Data/Yuval O/Rotem Simulations/New repo tests/figures/
 %% Load results and run analysis
 rng(0) % Set seed for reproducibility
 simulation_table = simulation_table.two_scouts_results;
-[dip_p_values, PLDC, phase_space_dT, phase_space_dX] = analyze_simulations_from_table(simulation_table, electrode_channel_poitions, electrode_grid, source_type, sampling_rate, cortex, plotting_config, save_path, files_prefix);
+[dip_p_values, PLDC, phase_space_dT, phase_space_dX, delta_Ts, delta_Xs] = analyze_simulations_from_table(simulation_table, electrode_channel_poitions, electrode_grid, source_type, sampling_rate, cortex, plotting_config, save_path, files_prefix);
