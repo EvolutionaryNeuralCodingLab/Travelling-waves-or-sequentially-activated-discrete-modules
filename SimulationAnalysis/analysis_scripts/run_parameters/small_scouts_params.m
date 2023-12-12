@@ -34,3 +34,6 @@ plotting_config.plot_source_position = 0; %P lot and save source positions
 % Selected single simulation for figures
 dt = 0.2;
 dx = 6;
+
+%for distance calculations
+dxs_for_distance = 1:8;
