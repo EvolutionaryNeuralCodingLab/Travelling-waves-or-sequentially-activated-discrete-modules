@@ -34,10 +34,7 @@ phase_space_dX = PLDCs;
 % z = channel_locations(:,3);        
 % x_sub = x(elecrode_nums);
 % y_sub = y(elecrode_nums);
-% z_sub = z(elecrode_nums);   
-if ~isempty(plotting_config.noise_gauss_params)
-    rng(1) %for reproducibility
-end
+% z_sub = z(elecrode_nums);
 
 if plotting_config.duplicate_hemisphere
    EEGcap = load('/media/sil2/Data/Yuval O/Rotem Simulations/SimulationAnalysis/spatial_data/EEGcap.mat'); %TODO: Move path to consts 
