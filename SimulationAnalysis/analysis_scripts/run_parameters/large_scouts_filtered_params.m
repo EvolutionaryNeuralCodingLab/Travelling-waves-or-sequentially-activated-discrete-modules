@@ -5,7 +5,7 @@ path_to_results_table = [results_dir, results_filename];
 
 cortex_name = "15002V";
 electrode_grid_name = 'electrode_grid_for_large_scouts';
-sampling_rate = 600; %Hz 
+sampling_rate = 10000; %Hz 
 source_type = 'scouts';
 files_prefix = "Two Scouts - "; % Saved files prefix
 
@@ -15,8 +15,8 @@ plotting_config.save_analysis_objects = 0;
 plotting_config.percentile = 0; % When analyzing results, drop top and bottom plotting_config.percentile of crossing times
 plotting_config.interpolate = 0; % Add additional crossings between any two crossings for smoothness
 plotting_config.ignore_source = 0; % Some plots rely on having a defined signal source. If a run is done without one - use this to avoid bugs
-plotting_config.ws = 1 ./ [1.6 1.4];
-plotting_config.fs = 600;
+plotting_config.ws = [10 12];
+plotting_config.fs = sampling_rate;
 plotting_config.start_end_wave = []; % Look at phase crossings only within these samples
 plotting_config.crop_at = [260, 5000];
 plotting_config.flip_signal = 0;

@@ -5,7 +5,7 @@ path_to_results_table = [results_dir, results_filename];
 
 cortex_name = "15002V";
 electrode_grid_name = 'electrode_grid_for_large_scouts';
-sampling_rate = 600; %Hz 
+sampling_rate = 10000; %Hz 
 source_type = 'scouts';
 files_prefix = "Two Scouts - "; % Saved files prefix
 
