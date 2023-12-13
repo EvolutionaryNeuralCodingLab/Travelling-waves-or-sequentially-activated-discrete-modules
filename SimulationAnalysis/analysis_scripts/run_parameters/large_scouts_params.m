@@ -35,3 +35,6 @@ dx = 4;
 
 %for distance calculations
 dxs_for_distance = 1:4;
+
+%For spatial lag plots
+plot_flipped_scouts = 0;
