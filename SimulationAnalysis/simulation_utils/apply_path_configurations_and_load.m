@@ -25,9 +25,10 @@ end
 electrode_grid = readmatrix(electrode_grid_path);
 
 %apply electrode grid name to save path
-save_path = [save_path, electrode_grid_name, '/'];
-if ~exist(save_path, 'dir')
-   mkdir(save_path)
+if ~isempty(save_path)
+    save_path = [save_path, electrode_grid_name, '/'];
+    if ~exist(save_path, 'dir')
+       mkdir(save_path)
+    end
 end
-
 end
