@@ -17,7 +17,7 @@ path_to_channel_positions = [get_analysis_code_base_path() 'spatial_data/channel
 save_path = ''; % This prevents saving metrics; but if any plotting option is true it'll save it in current dir
 
 % Apply path configurations and load
-[electrode_channel_poitions, cortex, simulation_table, electrode_grid, save_path] = apply_path_configurations_and_load(path_to_channel_positions,cortex_name,path_to_results_table,electrode_grid_name, save_path); 
+[electrode_channel_poitions, cortex, simulation_table, electrode_grid, ~] = apply_path_configurations_and_load(path_to_channel_positions,cortex_name,path_to_results_table,electrode_grid_name, save_path); 
 simulation_table = simulation_table.two_scouts_results;
 
 
