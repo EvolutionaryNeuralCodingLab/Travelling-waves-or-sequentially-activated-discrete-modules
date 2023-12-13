@@ -15,8 +15,8 @@ plotting_config.save_analysis_objects = 0;
 plotting_config.percentile = 0; % When analyzing results, drop top and bottom plotting_config.percentile of crossing times
 plotting_config.interpolate = 0; % Add additional crossings between any two crossings for smoothness
 plotting_config.ignore_source = 0; % Some plots rely on having a defined signal source. If a run is done without one - use this to avoid bugs
-plotting_config.fs = 10000; % Sampling rate (Hz)
-plotting_config.ws = [10 12];
+plotting_config.ws = 1 ./ [1.6 1.4];
+plotting_config.fs = 600;
 plotting_config.start_end_wave = []; % Look at phase crossings only within these samples
 plotting_config.crop_at = [260, 5000];
 plotting_config.flip_signal = 0;
@@ -37,4 +37,7 @@ dt = 0.2;
 dx = 4;
 
 %for distance calculations
-dxs_for_distance = 1:8;
+dxs_for_distance = 1:4;
+
+%For spatial lag plots
+plot_flipped_scouts = 0;
