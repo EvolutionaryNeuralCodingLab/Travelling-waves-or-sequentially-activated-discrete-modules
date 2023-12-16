@@ -6,10 +6,7 @@ close all
 %% Calc (or simply load in next section) avg response
 %Calc
 recObj=binaryRecording('/media/sil1/Data/Turtles/old turtle data/U4_071014/Binary/U4_071014_Images3001.bin');
-
-ticPath='/media/E/Yuval/Analysis/spikeSorting/sample data/U4/U4_071014_Images3001_layout_100_12x12_gridSorter FROM MARK.mat';
 load('layout_100_12x12.mat','En')
-
 load('/media/sil1/Data/Turtles/old turtle data/U4_071014/getDigitalTriggers.mat','tTrig')
 trigs=tTrig{5};
 
