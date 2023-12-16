@@ -22,10 +22,10 @@ startTimes=trigs(trials);
 
 
 [~,time,FDmean,HTmean,HTabsmean,HTanglemean] = getCroppedFD(recObj,startTimes,window_ms,widenBy,band,'returnAVG',1,'trialsInBatch',trialsInBatch);
-save('precalculated_mats/avg_response.mat','time','FDmean','HTmean','HTabsmean','HTanglemean')
+save([get_wave_analysis_code_base_path() 'precalculated_mats/avg_response.mat'],'time','FDmean','HTmean','HTabsmean','HTanglemean')
 
 %% Load results from last section
-load('precalculated_mats/avg_response.mat','time','FDmean','HTmean','HTabsmean','HTanglemean')
+load([get_wave_analysis_code_base_path() 'precalculated_mats/avg_response.mat'],'time','FDmean','HTmean','HTabsmean','HTanglemean')
 
 %% Find peaks and plot
 load('layout_100_12x12.mat','En')
