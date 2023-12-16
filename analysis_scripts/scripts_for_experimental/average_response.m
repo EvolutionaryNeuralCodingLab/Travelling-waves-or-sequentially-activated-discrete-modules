@@ -51,7 +51,6 @@ for i=1:nRelevant
     [~,maxInd]=max(pks);
     relevantMaximaTimes(i)=locs(maxInd);
 end
-% relevantMaximaTimes1=cellfun(@(x) x(1),locs);
 
 samplingFrequency=20e3;
 time=(1:size(FDmean,3))/samplingFrequency*1000; %sampling rate of 20kHz
