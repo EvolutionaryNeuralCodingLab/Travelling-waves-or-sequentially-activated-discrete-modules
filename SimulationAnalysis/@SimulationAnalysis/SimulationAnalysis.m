@@ -1,6 +1,8 @@
 classdef SimulationAnalysis
-    %SIMULATIONRUN Summary of this class goes here
-    %   Detailed explanation goes here
+    %SIMULATIONRUN Class for handling a single simulation analysis.
+    %   Contains all relevant simulation data (cortex, sources, etc.),
+    %   spatiotemporal setting (delta_X,delta_T) and result metrics
+    %   (PLDC,dip_p_value)
     
     properties
         cortex %cortex struct including cortex name and vertices_positions
