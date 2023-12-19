@@ -1,6 +1,5 @@
 classdef ElectrodeSet
-    %ELECTRODESET Summary of this class goes here
-    %   Detailed explanation goes here
+    %ELECTRODESET Object for handling simulated recording electrodes.
     
     properties
         n_electrodes
