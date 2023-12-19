@@ -1,2 +1,0 @@
-path_to_U4_recording = '/media/sil1/Data/Turtles/old turtle data/U4_071014/Binary/U4_071014_Images3001.bin';
-path_to_U4_digital_triggers = '/media/sil1/Data/Turtles/old turtle data/U4_071014/getDigitalTriggers.mat';
