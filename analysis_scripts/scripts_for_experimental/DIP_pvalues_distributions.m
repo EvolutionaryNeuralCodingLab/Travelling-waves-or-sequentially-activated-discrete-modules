@@ -22,9 +22,7 @@ widenBySamples=widenBy*recObj.samplingFrequency/1000;
 
 band=[0 2];
 
-% nTrials=length(trigs);
-% nTrialsInBatch=100;
-nTrials=100;
+nTrials=length(trigs);
 nTrialsInBatch=100;
 nBatches=ceil(nTrials/nTrialsInBatch);
 allTrials=1:nTrials;
