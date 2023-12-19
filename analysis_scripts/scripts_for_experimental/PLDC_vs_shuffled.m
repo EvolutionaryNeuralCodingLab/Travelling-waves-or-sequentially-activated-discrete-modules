@@ -19,7 +19,7 @@ triggers=recObj.getTrigger;
 trigs=triggers{5};
 
 load('layout_100_12x12.mat','En')
-excitationPhase=65*pi/180; %we saw that for slow waves, this is the phase related to onset
+excitationPhase=90*pi/180;
 crossingType=4;
 crossingsName={'Maxima','Minima','Halfway Up','Excitation'};
 
