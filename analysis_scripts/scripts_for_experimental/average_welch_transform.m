@@ -1,12 +1,10 @@
-% addpath(genpath('/media/E/Yuval/YuvalNET2'));
-
 clear all
 close all
 
 data_paths
 
 %% Calc (or simply load in next section) avg response
-%Calc
+
 recObj=binaryRecording(path_to_U4_recording);
 load('layout_100_12x12.mat','En')
 triggers=recObj.getTrigger;
