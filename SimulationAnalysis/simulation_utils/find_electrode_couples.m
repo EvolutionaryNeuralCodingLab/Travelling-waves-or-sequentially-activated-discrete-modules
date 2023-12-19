@@ -16,14 +16,6 @@ function [two_scouts_results_sym, couples] = find_electrode_couples(EEGcap, two_
     if sum(electrode_assign == ones(n, 1)) ~= n
         warning("electrode assigninment problem")
     end
-    
-%     figure()
-%     hold on
-%     scatter_electrodes(loc(left_hemi_elec_b, :), 'b')
-%     scatter_electrodes(loc(right_hemi_elec_b, :), 'r')
-%     scatter_electrodes(loc(fissure_elec_b, :), 'k')
-%     hold off
-
 
 %     find couples
     couples = zeros(n, 1);
@@ -42,9 +34,6 @@ function [two_scouts_results_sym, couples] = find_electrode_couples(EEGcap, two_
         end
     
     end
-
-%     figure()
-%     scatter_electrodes_couples(loc, couples);
 
     two_scouts_results_sym = two_scouts_results;
     for rec=1: size(two_scouts_results, 1)
