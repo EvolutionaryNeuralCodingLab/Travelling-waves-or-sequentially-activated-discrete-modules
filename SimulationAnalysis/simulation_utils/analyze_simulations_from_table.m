@@ -38,8 +38,6 @@ for i=1:n_rows
    else
        if strcmp(source_type,"scouts")
         sources = Scouts.init_source_from_table_row(row, cortex);
-       elseif strcmp(source_type,"dipoles")
-        sources = Dipoles.init_source_from_table_row(row, cortex);
        else
            error("Unkown source type.")
        end
