@@ -39,8 +39,6 @@ classdef SimulationAnalysis
             obj.cortex = cortex;
             obj.source_delta_T = source_delta_T;
             obj.source_delta_X = source_delta_X;
-%             obj.dip_p_value = obj.calc_dip_p_value();
-%             obj.PLDC = obj.calc_PLDC();
         end
 
         function [phase_event_heights, phase_event_locs] = get_phase_events(obj,event_type,start_end_wave)
@@ -96,10 +94,6 @@ classdef SimulationAnalysis
             En = NaN(size(obj.electrode_grid));
             En(subset_mask) = 1:sum(subset_mask,'all');
         end
-
-%         function convert_x_from_sample_to_seconds(obj,ax)
-%             set(ax,'xtick',ax.XTick,'xticklabel',ax.XTick / obj.sampling_rate)
-%         end
     end
 end
 
