@@ -1,7 +1,7 @@
 function [all_scouts_dipoles_positions, mean_electrode_dist, scouts_dist_per_electrode_dist, scouts_stds, scouts_dist_per_std] = ...
     calc_distances(dxs, dt, electrode_grid, cortex, simulation_table, electrode_channel_poitions)
-%CALC_DISTANCES Summary of this function goes here
-%   dt is arbitrary
+%CALC_DISTANCES calculates the distance of scouts.
+%   dt varargin is arbitrary, just needs to be present in table.
 
 all_scouts_dipoles_positions = cell(length(dxs),1);
 scouts_mean_distances = zeros(length(dxs),1);
