@@ -1,6 +1,8 @@
 function [dip_p_values, PLDCs, phase_space_dT, phase_space_dX, delta_Ts, delta_Xs] = analyze_simulations_from_table(simulation_table, electrode_channel_poitions, electrode_grid, source_type, sampling_rate, cortex, plotting_config, save_path, files_prefix)
 %ANALYZE_SIMULATIONS Analyzes all simulations save in a table format.
-%   Both returns and saves metrics! Unless save_path='' (is_empty) then it
+%   Each row of the table contains a simulation that uses a different
+%   spatiotemporal setting (i.e., delta_X and delta_T).
+%   The function both returns and saves metrics! Unless save_path='' (is_empty) then it
 %   doesn't save.
 
 
