@@ -20,7 +20,7 @@ phase_space_dT = PLDCs;
 phase_space_dX = PLDCs;
 
 if plotting_config.duplicate_hemisphere
-   EEGcap = load('/media/sil2/Data/Yuval O/Rotem Simulations/SimulationAnalysis/spatial_data/EEGcap.mat'); %TODO: Move path to consts 
+   EEGcap = load([get_analysis_code_base_path 'spatial_data/EEGcap.mat']); 
    EEGcap = EEGcap.EEGcap;
    [simulation_table, ~] = find_electrode_couples(EEGcap, simulation_table);
 end
