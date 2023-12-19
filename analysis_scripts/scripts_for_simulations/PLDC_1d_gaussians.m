@@ -1,5 +1,5 @@
 %% Calculate PLDC phase space 
-%clear all
+clear all
 
 %create spatial parameters
 dxLim=[1 10];
@@ -50,8 +50,3 @@ colorbar
 xlabel('\DeltaX [AU]')
 ylabel('\sigma_X [AU]')
 title(['deltaT ' num2str(deltaT) ' sigmaT ' num2str(sigmaT)])
-
-
-
-% set(gcf,'PaperPositionMode','auto');
-% print 'PLDC_phase_space_dt2_s1' -dpdf -painters;
