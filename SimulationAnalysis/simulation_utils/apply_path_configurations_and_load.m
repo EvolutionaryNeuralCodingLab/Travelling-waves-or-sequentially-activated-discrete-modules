@@ -1,6 +1,6 @@
 function [electrode_channel_poitions, cortex, simulation_table, electrode_grid, save_path] = apply_path_configurations_and_load(path_to_channel_positions,cortex_name,path_to_results_table,electrode_grid_name, save_path)
-%APPLY_PATH_CONFIGURATIONS Summary of this function goes here
-%   Detailed explanation goes here
+%APPLY_PATH_CONFIGURATIONS Sets and loads parameters use for analysis, 
+% according to chosen paths and configurations
 
 %load channel positions
 electrode_channel_poitions = load(path_to_channel_positions );
