@@ -73,7 +73,6 @@ classdef Scouts < SignalSource
             for scout_num=1:n_scouts
                 scouts_vertices_inds = row.scouts{1,1}{1,scout_num}.Vertices;
                 scouts_positions{scout_num} = cortex.vertices_positions(scouts_vertices_inds,:);
-%                 scatter3(scout_vertices_locs(:,1),scout_vertices_locs(:,2),scout_vertices_locs(:,3),scout_colors(scout_num),'filled');
                 signal = row.signal{1};
             end
             source = Scouts(scouts_positions, signal);
