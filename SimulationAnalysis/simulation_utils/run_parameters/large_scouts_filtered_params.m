@@ -1,5 +1,5 @@
 % Path to simulation table
-results_dir = '/media/sil2/Data/Yuval O/Rotem Simulations/221204 simulations/large size scouts/multiple bumps/';
+results_dir = '/path/to/simulation/results/dir/';
 results_filename = 'simulation results.mat';
 path_to_results_table = [results_dir, results_filename];
 
