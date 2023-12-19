@@ -84,15 +84,6 @@ classdef ElectrodeSet
             obj.electrode_positions = electrode_positions;
             obj.n_electrodes = size(electrode_positions,1);
             obj.electrode_nums = 1:obj.n_electrodes;
-%             if exist(electrode_grid,'var')
-%                 obj.electrode_grid = electrode_grid;
-%                 obj.electrode_nums = electrode_grid(:);
-%                 obj.has_grid = True;
-%             else
-%                 obj.electrode_grid = [];
-%                 obj.electrode_nums = 1:n_electrodes;
-%                 obj.has_grid = False;
-%             end
         end
         
         function ax = plot_electrode_positions(obj, ax, subset)
@@ -108,7 +99,6 @@ classdef ElectrodeSet
         end
         
         function [ax] = plot_signal(obj, ax, electrode_grid, subset, start_end_wave, phase_event_locs, phase_event_heights)
-            %METHOD1 Summary of this method goes here
             %   TODO: allow subset to be empty/not delievered
 
             if ~exist('ax','var')
@@ -116,7 +106,7 @@ classdef ElectrodeSet
                 ax=gca;
             end
             if isempty(obj.parent_analysis)
-                sampling_rate = 1; %#Todo: get this as optional varain
+                sampling_rate = 1;
             else
                 sampling_rate = obj.parent_analysis.sampling_rate;
             end
