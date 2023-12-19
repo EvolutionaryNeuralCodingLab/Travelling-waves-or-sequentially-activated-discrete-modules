@@ -9,7 +9,7 @@ data_paths
 %Calc
 recObj=binaryRecording(path_to_U4_recording);
 load('layout_100_12x12.mat','En')
-load(path_to_U4_digital_triggers,'tTrig')
+triggers=recObj.getTrigger;
 trigs=tTrig{5};
 
 window_ms=1500;
