@@ -1,5 +1,3 @@
-% addpath(genpath('/media/E/Yuval/YuvalNET2'));
-
 clear all
 close all
 
