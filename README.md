@@ -5,7 +5,7 @@ Repository for analyzing simulated or recorded electrophisiological data.
 ## General description
 This code was used to analyze data for the paper Travelling-waves-or-sequentially-activated-discrete-modules by Orsher et al., 2023.
 
-There are two main section - **SimulationAnalysis** which contains the code used to analyze simualted 
+There are two main sections - **SimulationAnalysis** which contains the code used to analyze simualted 
 data created by BrainStorm, and **WaveAnalysis** which contains the code used to
 analyze the electrophysiological recordings (and some of the Simulated data).
 
