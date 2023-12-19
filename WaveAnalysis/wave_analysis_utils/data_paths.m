@@ -1,2 +1,2 @@
-path_to_U4_recording = '/media/sil1/Data/Turtles/old turtle data/U4_071014/Binary/U4_071014_Images3001.bin';
-path_to_U4_tIc = '/media/E/Yuval/Analysis/spikeSorting/sample data/U4/U4_071014_Images3001_layout_100_12x12_gridSorter FROM MARK.mat';
+path_to_U4_recording = 'path/to/U4/binary/recording.bin';
+path_to_U4_tIc = 'path/to/spike/sorting/results/tIc.mat';
