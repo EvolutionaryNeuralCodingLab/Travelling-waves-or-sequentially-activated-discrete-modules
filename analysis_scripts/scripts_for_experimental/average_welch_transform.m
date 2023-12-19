@@ -3,11 +3,13 @@
 clear all
 close all
 
+data_paths
+
 %% Calc (or simply load in next section) avg response
 %Calc
-recObj=binaryRecording('/media/sil1/Data/Turtles/old turtle data/U4_071014/Binary/U4_071014_Images3001.bin');
+recObj=binaryRecording(path_to_U4_recording);
 load('layout_100_12x12.mat','En')
-load('/media/sil1/Data/Turtles/old turtle data/U4_071014/getDigitalTriggers.mat','tTrig')
+load(path_to_U4_digital_triggers,'tTrig')
 trigs=tTrig{5};
 
 window_ms=2000;
@@ -15,10 +17,8 @@ widenBy=2000; %ms
 windenBySamples=widenBy*recObj.samplingFrequency/1000;
 band=[0 2];
 
-% trialsInBatch=100;
-% nBatches=10;
-trialsInBatch=10;
-nBatches=1;
+trialsInBatch=100;
+nBatches=10;
 nTrials=nBatches*trialsInBatch;
 
 pxxsSum=zeros(100001,recObj.totalChannels,trialsInBatch);
