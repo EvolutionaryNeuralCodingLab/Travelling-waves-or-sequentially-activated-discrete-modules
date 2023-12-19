@@ -1,6 +1,5 @@
 classdef Scouts < SignalSource
-    %SCOUTS Summary of this class goes here
-    %   Detailed explanation goes here
+    %SCOUTS Object to handle a Scouts signal source
     properties (Constant)
         SOURCE_TYPE = 'Scouts'
         SCOUT_COLORS = 'brgyk'
