@@ -15,5 +15,5 @@ To actually run a particular script please contact Mark for the relevant
 datas.
 
 ## Dependencies
-Data analysis of recorded electrophysiological uses NET code for data processing.
+Data analysis of recorded electrophysiological uses [time-series-viewer](https://github.com/EvolutionaryNeuralCodingLab/time-series-viewer)https://github.com/EvolutionaryNeuralCodingLab/time-series-viewer code for data processing.
 Please clone it and have add it to path.
