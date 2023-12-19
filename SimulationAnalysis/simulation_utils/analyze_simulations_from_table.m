@@ -3,11 +3,6 @@ function [dip_p_values, PLDCs, phase_space_dT, phase_space_dX, delta_Ts, delta_X
 %   Both returns and saves metrics! Unless save_path='' (is_empty) then it
 %   doesn't save.
 
-%sampling_rate introduced later - so throw error if an old script is run,
-%where sampling_rate is actually cortex (the next variable)
-if ~isa(sampling_rate,'double')
-    error('5th input (sampling_rate) should be numeric.')
-end
 
 %Fill missing plotting values with defaults
 plotting_config = fill_missing_configs_with_defaults(plotting_config,get_default_plotting_config());
