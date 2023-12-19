@@ -8,7 +8,7 @@ classdef CachedFilteredSignal
     end
     
     properties (Constant)
-        DEFAULT_CACHED_FOLDER = '/media/sil2/Data/Yuval O/Rotem Simulations/cached_filtered_data/';
+        DEFAULT_CACHED_FOLDER = [get_analysis_code_base_path.m 'cached_filtered_data/'];
         DEFAULT_CACHED_PREFIX = 'electrode_signal_bandpass_filtered_';
     end
 
