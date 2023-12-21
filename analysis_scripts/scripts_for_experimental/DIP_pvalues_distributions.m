@@ -93,7 +93,7 @@ end
 save([get_wave_analysis_code_base_path() 'precalculated_mats/U4Statistics90phase.mat'],'dip_pvalues','trialsParticipated')
 %%
 
-save([get_wave_analysis_code_base_path() 'precalculated_mats/U4Statistics90phase.mat'],'dip_pvalues','trialsParticipated')
+load([get_wave_analysis_code_base_path() 'precalculated_mats/U4Statistics90phase.mat'],'dip_pvalues','trialsParticipated')
 
 %% % Plot dip p-values
 
