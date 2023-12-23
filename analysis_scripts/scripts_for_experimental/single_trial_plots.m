@@ -1,7 +1,90 @@
-%% U4 trial 17 plots
-
 clear all
 close all
+
+%% Plot signals - raw, HP, LP, Hilbert & ALSA
+
+linesWidths=1;
+scaleBarWidth=0.5;
+
+load([get_wave_analysis_code_base_path() 'precalculated_mats/single_trial_plots_data_signals.mat'],...
+    'time','single_ch_data','single_ch_FD','single_ch_HT_angle','single_ch_HP','single_ch_bin_spikes', ...
+    'samplingFrequency','single_ch_ALSA'...
+    )
+
+
+%%%
+f=figure;
+h(1)=plot(time,single_ch_data,'Color',0.7*[1 1 1],'LineWidth',linesWidths);
+hold on
+h(2)=plot(time,single_ch_FD,'b','LineWidth',linesWidths);
+plot([50,50],[100,150],'b','LineWidth',scaleBarWidth) %scale bar
+add2phase=-abs(min(single_ch_data))-max(single_ch_HT_angle*10)-5;
+h(3)=plot(time,single_ch_HT_angle*10+add2phase,'Color',[0 0.9 0],'LineWidth',linesWidths);
+add2scalebar=add2phase-abs(min(single_ch_HT_angle)*10);
+plot([50,50],[add2scalebar+20*pi,add2scalebar+20*pi+2*pi*10],'Color',[0 0.9 0],'LineWidth',scaleBarWidth) %scale bar
+add2HP=+max(single_ch_data)+abs(min(single_ch_HP)+10);
+h(4)=plot(time,squeeze(single_ch_HP)+add2HP,'k','LineWidth',linesWidths);
+singleChannelSpikes=find(single_ch_bin_spikes)/samplingFrequency*1000;
+add2spikes=add2HP+max(single_ch_HP)+10;
+
+for i=1:length(singleChannelSpikes)
+   plot([singleChannelSpikes(i) singleChannelSpikes(i)],[add2spikes add2spikes+15],'k','LineWidth',0.7)
+end
+add2alsa = add2spikes + 50;
+h(5) = plot(time, single_ch_ALSA+add2alsa,'r','LineWidth',linesWidths);
+xlabel('Time [ms]')
+leg=legend(h,{'Unfiltered Data','LP Filtered Data','Hilbert Phase','HP Filtered Data','ALSA'},'Location','north','Orientation','horizontal','NumColumns',5);
+legend('boxoff')
+ylimit=ylim;
+ylim([ylimit(1) add2alsa+155])
+yticks([])
+%manually set legend size cuz its huge
+ax=gca;
+ax.Legend.FontSize=7.5;
+ax.Legend.ItemTokenSize=[5 48];
+
+
+%% Plot Latency maps - LPF phase crossings and ALSA
+
+load([get_wave_analysis_code_base_path() 'precalculated_mats/single_trial_plots_data_latency_maps.mat'],...
+    'chs','normedTimes_LFP','En','waveCenterPath','relevantChannels','normedTimes_ALSA')
+
+%Plot LFP PLM
+f=figure;
+[hCbar,h]=IntensityPhysicalSpacePlot(chs,normedTimes_LFP,En,'plotElectrodeNumbers',0,'plotSizeBar',0,'plotGridLines',0,'markerSize',10);
+set(h,'Units','centimeters','Position',[1.5,0.5,1.5,1.5])
+set(hCbar,'Units','centimeters','Position',[1.2,0.5,0.15,1.5])
+
+ylabel(hCbar,{'Latency','[ms]'},'Units','centimeters','Position',[-0.25,0.71,0],'FontSize',8);
+set(f,'Units','centimeters','Position',[18 23.3 3.3 2.4]);
+hold on
+scatter(waveCenterPath(:,1),waveCenterPath(:,2),10,'k')
+
+%Plot ALSA PLM
+f=figure;
+[hCbar,h]=IntensityPhysicalSpacePlot(relevantChannels,normedTimes_ALSA,En,'plotElectrodeNumbers',0,'plotSizeBar',0,'plotGridLines',0,'markerSize',10);
+set(h,'Units','centimeters','Position',[1.5,0.5,1.5,1.5])
+set(hCbar,'Units','centimeters','Position',[1.2,0.5,0.15,1.5])
+
+ylabel(hCbar,{'Latency','[ms]'},'Units','centimeters','Position',[-0.25,0.71,0],'FontSize',8);
+set(f,'Units','centimeters','Position',[18 23.3 3.3 2.4]);
+hold on
+scatter(waveCenterPath(:,1),waveCenterPath(:,2),10,'k')
+
+
+%% Plot raster plot, phase crossing and ALSA
+
+load([get_wave_analysis_code_base_path() 'precalculated_mats/raster_crossings_ALSA_plot_data.mat'],'crossing_mat','hilbert_amps_mat','startEndWave','chNums','ms2samples','binSpikes','relevantALSATimes','relevantChannels')
+
+
+[ch_nums_ordered] = order_channels_by_crossing_times(crossing_mat,startEndWave,1:120);
+[rel_ch_nums_ordered,ia,ib] = intersect(relevantChannels,ch_nums_ordered,'stable');
+
+plotSingleHilbertCrossing(crossing_mat,hilbert_amps_mat,0,'',1,'Spikes',binSpikes,'plotLegend',false,'timeInms',1,'sample2ms',1/ms2samples,'sz',5,'order',ch_nums_ordered);
+hold on
+plot(relevantALSATimes(ia)/ms2samples,rel_ch_nums_ordered,'.r','markerSize',6) %6 is the default, and is the size defined for spike in plotSingleHilbertCrossing
+
+%% U4 trial 17 calculations - load for all calcualtions
 
 data_paths
 
@@ -18,7 +101,7 @@ trigs=tTrig{5};
 
 startTimes=trigs(trial);
 
-%% Plot signals - raw, HP, LP, Hilbert & ALSA
+%% Calculate signals - raw, HP, LP, Hilbert & ALSA
 
 window_ms=3000;
 widenBy=2000; %ms
@@ -37,38 +120,20 @@ ALSA = getALSAFromTIC(path_to_U4_tIc,startTimes,window_ms,En,recObj.samplingFreq
 
 %   plot raw, FD and hilbert   %
 singleChannel=100; 
-linesWidths=1;
-scaleBarWidth=0.5;
-%%%
-f=figure;
-h(1)=plot(time,squeeze(data(singleChannel,1,:)),'Color',0.7*[1 1 1],'LineWidth',linesWidths);
-hold on
-h(2)=plot(time,squeeze(FD(singleChannel,1,:)),'b','LineWidth',linesWidths);
-plot([50,50],[100,150],'b','LineWidth',scaleBarWidth) %scale bar
-add2phase=-abs(min(data(singleChannel,1,:)))-max(squeeze(HTangle(singleChannel,1,:))*10)-5;
-h(3)=plot(time,squeeze(HTangle(singleChannel,1,:))*10+add2phase,'Color',[0 0.9 0],'LineWidth',linesWidths);
-add2scalebar=add2phase-abs(min(squeeze(HTangle(singleChannel,1,:))))*10;
-plot([50,50],[add2scalebar+20*pi,add2scalebar+20*pi+2*pi*10],'Color',[0 0.9 0],'LineWidth',scaleBarWidth) %scale bar
-add2HP=+max(data(singleChannel,1,:))+abs(min(squeeze(FD_HP(singleChannel,1,:))))+10;
-h(4)=plot(time,squeeze(FD_HP(singleChannel,1,:))+add2HP,'k','LineWidth',linesWidths);
-singleChannelSpikes=find(binSpikes(singleChannel,:))/recObj.samplingFrequency*1000;
-add2spikes=add2HP+max(squeeze(FD_HP(singleChannel,1,:)))+10;
 
-for i=1:length(singleChannelSpikes)
-   plot([singleChannelSpikes(i) singleChannelSpikes(i)],[add2spikes add2spikes+15],'k','LineWidth',0.7)
-end
-add2alsa = add2spikes + 50;
-h(5) = plot(time, ALSA(singleChannel,:)+add2alsa,'r','LineWidth',linesWidths);
-xlabel('Time [ms]')
-leg=legend(h,{'Unfiltered Data','LP Filtered Data','Hilbert Phase','HP Filtered Data','ALSA'},'Location','north','Orientation','horizontal','NumColumns',5);
-legend('boxoff')
-ylimit=ylim;
-ylim([ylimit(1) add2alsa+155])
-yticks([])
-%manually set legend size cuz its huge
-ax=gca;
-ax.Legend.FontSize=7.5;
-ax.Legend.ItemTokenSize=[5 48];
+single_ch_data = squeeze(data(singleChannel,1,:));
+single_ch_FD = squeeze(FD(singleChannel,1,:));
+single_ch_HT_angle = squeeze(HTangle(singleChannel,1,:));
+single_ch_HP = squeeze(FD_HP(singleChannel,1,:));
+single_ch_bin_spikes = binSpikes(singleChannel,:);
+samplingFrequency = recObj.samplingFrequency;
+single_ch_ALSA = ALSA(singleChannel,:);
+
+
+save([get_wave_analysis_code_base_path() 'precalculated_mats/single_trial_plots_data_signals.mat'],...
+    'singleChannel','time','single_ch_data','single_ch_FD','single_ch_HT_angle','single_ch_HP','single_ch_bin_spikes', ...
+    'samplingFrequency','single_ch_ALSA'...
+    )
 
 %% Latency maps - LPF phase crossings and ALSA
 
@@ -104,26 +169,9 @@ ALSALimits=[max(1,startEndWave(1)-waveWidth/2),min(round(window_ms*recObj.sampli
 [relevantChannels,relevantCrossingTimes,relevantALSATimes]=getRelevantWaveTimes(channels{1},times{1},channelsWithALSA,ALSA_Locs,nCh);
 waveCenterPath = drawWavePath(crossings{crossingType},hilbertAmps{crossingType},startEndWave,En,'normCoordinates',0,'flipEn',0);
 
-%Plot LFP PLM
-normedTimes=(times{1}-min(times{1}))/recObj.samplingFrequency*1000; %when possible, should be relevantCrossingTimes from getRelevantWaveTimes. Also channels{1} should be relevantChannels
-f=figure;
-[hCbar,h]=IntensityPhysicalSpacePlot(channels{1},normedTimes,En,'plotElectrodeNumbers',0,'plotSizeBar',0,'plotGridLines',0,'markerSize',10);
-set(h,'Units','centimeters','Position',[1.5,0.5,1.5,1.5])
-set(hCbar,'Units','centimeters','Position',[1.2,0.5,0.15,1.5])
+chs = channels{1};
+normedTimes_LFP=(times{1}-min(times{1}))/recObj.samplingFrequency*1000; %when possible, should be relevantCrossingTimes from getRelevantWaveTimes. Also channels{1} should be relevantChannels
+normedTimes_ALSA=(relevantALSATimes-min(relevantALSATimes))/recObj.samplingFrequency*1000;
 
-ylabel(hCbar,{'Latency','[ms]'},'Units','centimeters','Position',[-0.25,0.71,0],'FontSize',8);
-set(f,'Units','centimeters','Position',[18 23.3 3.3 2.4]);
-hold on
-scatter(waveCenterPath(:,1),waveCenterPath(:,2),10,'k')
-
-%Plot ALSA PLM
-f=figure;
-normedTimes=(relevantALSATimes-min(relevantALSATimes))/recObj.samplingFrequency*1000;
-[hCbar,h]=IntensityPhysicalSpacePlot(relevantChannels,normedTimes,En,'plotElectrodeNumbers',0,'plotSizeBar',0,'plotGridLines',0,'markerSize',10);
-set(h,'Units','centimeters','Position',[1.5,0.5,1.5,1.5])
-set(hCbar,'Units','centimeters','Position',[1.2,0.5,0.15,1.5])
-
-ylabel(hCbar,{'Latency','[ms]'},'Units','centimeters','Position',[-0.25,0.71,0],'FontSize',8);
-set(f,'Units','centimeters','Position',[18 23.3 3.3 2.4]);
-hold on
-scatter(waveCenterPath(:,1),waveCenterPath(:,2),10,'k')
+save([get_wave_analysis_code_base_path() 'precalculated_mats/single_trial_plots_data_latency_maps.mat'],...
+    'chs','normedTimes_LFP','En','waveCenterPath','relevantChannels','normedTimes_ALSA')
