@@ -43,6 +43,35 @@ ax=gca;
 ax.Legend.FontSize=7.5;
 ax.Legend.ItemTokenSize=[5 48];
 
+
+%% Plot Latency maps - LPF phase crossings and ALSA
+
+load([get_wave_analysis_code_base_path() 'precalculated_mats/single_trial_plots_data_latency_maps.mat'],...
+    'chs','normedTimes_LFP','En','waveCenterPath','relevantChannels','normedTimes_ALSA')
+
+%Plot LFP PLM
+f=figure;
+[hCbar,h]=IntensityPhysicalSpacePlot(chs,normedTimes_LFP,En,'plotElectrodeNumbers',0,'plotSizeBar',0,'plotGridLines',0,'markerSize',10);
+set(h,'Units','centimeters','Position',[1.5,0.5,1.5,1.5])
+set(hCbar,'Units','centimeters','Position',[1.2,0.5,0.15,1.5])
+
+ylabel(hCbar,{'Latency','[ms]'},'Units','centimeters','Position',[-0.25,0.71,0],'FontSize',8);
+set(f,'Units','centimeters','Position',[18 23.3 3.3 2.4]);
+hold on
+scatter(waveCenterPath(:,1),waveCenterPath(:,2),10,'k')
+
+%Plot ALSA PLM
+f=figure;
+[hCbar,h]=IntensityPhysicalSpacePlot(relevantChannels,normedTimes_ALSA,En,'plotElectrodeNumbers',0,'plotSizeBar',0,'plotGridLines',0,'markerSize',10);
+set(h,'Units','centimeters','Position',[1.5,0.5,1.5,1.5])
+set(hCbar,'Units','centimeters','Position',[1.2,0.5,0.15,1.5])
+
+ylabel(hCbar,{'Latency','[ms]'},'Units','centimeters','Position',[-0.25,0.71,0],'FontSize',8);
+set(f,'Units','centimeters','Position',[18 23.3 3.3 2.4]);
+hold on
+scatter(waveCenterPath(:,1),waveCenterPath(:,2),10,'k')
+
+
 %% U4 trial 17 calculations - load for all calcualtions
 
 data_paths
@@ -128,26 +157,9 @@ ALSALimits=[max(1,startEndWave(1)-waveWidth/2),min(round(window_ms*recObj.sampli
 [relevantChannels,relevantCrossingTimes,relevantALSATimes]=getRelevantWaveTimes(channels{1},times{1},channelsWithALSA,ALSA_Locs,nCh);
 waveCenterPath = drawWavePath(crossings{crossingType},hilbertAmps{crossingType},startEndWave,En,'normCoordinates',0,'flipEn',0);
 
-%Plot LFP PLM
-normedTimes=(times{1}-min(times{1}))/recObj.samplingFrequency*1000; %when possible, should be relevantCrossingTimes from getRelevantWaveTimes. Also channels{1} should be relevantChannels
-f=figure;
-[hCbar,h]=IntensityPhysicalSpacePlot(channels{1},normedTimes,En,'plotElectrodeNumbers',0,'plotSizeBar',0,'plotGridLines',0,'markerSize',10);
-set(h,'Units','centimeters','Position',[1.5,0.5,1.5,1.5])
-set(hCbar,'Units','centimeters','Position',[1.2,0.5,0.15,1.5])
+chs = channels{1};
+normedTimes_LFP=(times{1}-min(times{1}))/recObj.samplingFrequency*1000; %when possible, should be relevantCrossingTimes from getRelevantWaveTimes. Also channels{1} should be relevantChannels
+normedTimes_ALSA=(relevantALSATimes-min(relevantALSATimes))/recObj.samplingFrequency*1000;
 
-ylabel(hCbar,{'Latency','[ms]'},'Units','centimeters','Position',[-0.25,0.71,0],'FontSize',8);
-set(f,'Units','centimeters','Position',[18 23.3 3.3 2.4]);
-hold on
-scatter(waveCenterPath(:,1),waveCenterPath(:,2),10,'k')
-
-%Plot ALSA PLM
-f=figure;
-normedTimes=(relevantALSATimes-min(relevantALSATimes))/recObj.samplingFrequency*1000;
-[hCbar,h]=IntensityPhysicalSpacePlot(relevantChannels,normedTimes,En,'plotElectrodeNumbers',0,'plotSizeBar',0,'plotGridLines',0,'markerSize',10);
-set(h,'Units','centimeters','Position',[1.5,0.5,1.5,1.5])
-set(hCbar,'Units','centimeters','Position',[1.2,0.5,0.15,1.5])
-
-ylabel(hCbar,{'Latency','[ms]'},'Units','centimeters','Position',[-0.25,0.71,0],'FontSize',8);
-set(f,'Units','centimeters','Position',[18 23.3 3.3 2.4]);
-hold on
-scatter(waveCenterPath(:,1),waveCenterPath(:,2),10,'k')
+save([get_wave_analysis_code_base_path() 'precalculated_mats/single_trial_plots_data_latency_maps.mat'],...
+    'chs','normedTimes_LFP','En','waveCenterPath','relevantChannels','normedTimes_ALSA')
