@@ -3,10 +3,17 @@
 clear all
 close all
 
+%% Load final results for figure
+
+load([get_wave_analysis_code_base_path() 'precalculated_mats/U4Statistics90phase.mat'],'dip_pvalues','trialsParticipated')
+
+%% % Plot dip p-values
+
+[f,PoD]=plotPvalues(dip_pvalues(1,trialsParticipated),dip_pvalues(2,trialsParticipated),'plotLines',0);
+set(gcf,'Units','centimeters','Position',[14.0000   12.9381    9.3    5.45])
+
+%% Calculation of DIP-test p-values
 data_paths
-
-%% Calc (or simply load in next section) DIP-test p-values
-
 recObj=binaryRecording(path_to_U4_recording);
 
 triggers=recObj.getTrigger;
@@ -91,11 +98,3 @@ for batch=1:nBatches
 end
 
 save([get_wave_analysis_code_base_path() 'precalculated_mats/U4Statistics90phase.mat'],'dip_pvalues','trialsParticipated')
-%%
-
-load([get_wave_analysis_code_base_path() 'precalculated_mats/U4Statistics90phase.mat'],'dip_pvalues','trialsParticipated')
-
-%% % Plot dip p-values
-
-[f,PoD]=plotPvalues(dip_pvalues(1,trialsParticipated),dip_pvalues(2,trialsParticipated),'plotLines',0);
-set(gcf,'Units','centimeters','Position',[14.0000   12.9381    9.3    5.45]);

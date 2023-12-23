@@ -3,9 +3,31 @@
 clear all
 close all
 
-data_paths
+%% Load final results for figure
 
-%% Calc (or simply load in next section) PLDC vs shuffled
+load([get_wave_analysis_code_base_path() 'precalculated_mats/correlations.mat'],'rCoefs','rShuffles')
+
+%% Plot PLDC vs shuffled
+
+edges=linspace(-1,1,31);
+histogram(rCoefs,edges,'Normalization','Probability');
+hold on
+histogram(rShuffles(:),edges,'Normalization','Probability');
+
+xlabel('PLDC')
+ylabel('Frequency')
+legend({'Real data','Shuffled Data'},'Location','northwest')
+legend('box','off')
+ax=gca;
+ax.Legend.FontSize=6;
+ax.Legend.ItemTokenSize=[5 48];
+
+ylim([0 0.6])
+set(gcf,'Units','centimeters','Position',[17 14 4 3]);
+
+%% Calculation of PLDC vs shuffled
+
+data_paths
 
 window_ms=1500; %ms
 widenBy=2000;
@@ -59,24 +81,3 @@ for batch=1:nBatches
     save([get_wave_analysis_code_base_path() 'precalculated_mats/correlations.mat'],'rCoefs','allTrialsTimes','allTrialsChannels','distances','shuffledRMean','shuffledRstd','rShuffles')
 
 end
-
-%% Load results from last section
-
-load([get_wave_analysis_code_base_path() 'precalculated_mats/correlations.mat'],'rCoefs','allTrialsTimes','allTrialsChannels','distances','shuffledRMean','shuffledRstd','rShuffles')
-
-%% Plot
-edges=linspace(-1,1,31);
-histogram(rCoefs,edges,'Normalization','Probability');
-hold on
-histogram(rShuffles(:),edges,'Normalization','Probability');
-
-xlabel('PLDC')
-ylabel('Frequency')
-legend({'Real data','Shuffled Data'},'Location','northwest')
-legend('box','off')
-ax=gca;
-ax.Legend.FontSize=6;
-ax.Legend.ItemTokenSize=[5 48];
-
-ylim([0 0.6])
-set(gcf,'Units','centimeters','Position',[17 14 4 3]);
