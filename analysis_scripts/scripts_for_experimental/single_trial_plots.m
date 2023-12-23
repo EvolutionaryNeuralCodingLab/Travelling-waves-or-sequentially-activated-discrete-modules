@@ -1,7 +1,49 @@
-%% U4 trial 17 plots
-
 clear all
 close all
+
+%% Plot signals - raw, HP, LP, Hilbert & ALSA
+
+linesWidths=1;
+scaleBarWidth=0.5;
+
+load([get_wave_analysis_code_base_path() 'precalculated_mats/single_trial_plots_data_signals.mat'],...
+    'time','single_ch_data','single_ch_FD','single_ch_HT_angle','single_ch_HP','single_ch_bin_spikes', ...
+    'samplingFrequency','single_ch_ALSA'...
+    )
+
+
+%%%
+f=figure;
+h(1)=plot(time,single_ch_data,'Color',0.7*[1 1 1],'LineWidth',linesWidths);
+hold on
+h(2)=plot(time,single_ch_FD,'b','LineWidth',linesWidths);
+plot([50,50],[100,150],'b','LineWidth',scaleBarWidth) %scale bar
+add2phase=-abs(min(single_ch_data))-max(single_ch_HT_angle*10)-5;
+h(3)=plot(time,single_ch_HT_angle*10+add2phase,'Color',[0 0.9 0],'LineWidth',linesWidths);
+add2scalebar=add2phase-abs(min(single_ch_HT_angle)*10);
+plot([50,50],[add2scalebar+20*pi,add2scalebar+20*pi+2*pi*10],'Color',[0 0.9 0],'LineWidth',scaleBarWidth) %scale bar
+add2HP=+max(single_ch_data)+abs(min(single_ch_HP)+10);
+h(4)=plot(time,squeeze(single_ch_HP)+add2HP,'k','LineWidth',linesWidths);
+singleChannelSpikes=find(single_ch_bin_spikes)/samplingFrequency*1000;
+add2spikes=add2HP+max(single_ch_HP)+10;
+
+for i=1:length(singleChannelSpikes)
+   plot([singleChannelSpikes(i) singleChannelSpikes(i)],[add2spikes add2spikes+15],'k','LineWidth',0.7)
+end
+add2alsa = add2spikes + 50;
+h(5) = plot(time, single_ch_ALSA+add2alsa,'r','LineWidth',linesWidths);
+xlabel('Time [ms]')
+leg=legend(h,{'Unfiltered Data','LP Filtered Data','Hilbert Phase','HP Filtered Data','ALSA'},'Location','north','Orientation','horizontal','NumColumns',5);
+legend('boxoff')
+ylimit=ylim;
+ylim([ylimit(1) add2alsa+155])
+yticks([])
+%manually set legend size cuz its huge
+ax=gca;
+ax.Legend.FontSize=7.5;
+ax.Legend.ItemTokenSize=[5 48];
+
+%% U4 trial 17 calculations - load for all calcualtions
 
 data_paths
 
@@ -18,7 +60,7 @@ trigs=tTrig{5};
 
 startTimes=trigs(trial);
 
-%% Plot signals - raw, HP, LP, Hilbert & ALSA
+%% Calculate signals - raw, HP, LP, Hilbert & ALSA
 
 window_ms=3000;
 widenBy=2000; %ms
@@ -37,38 +79,20 @@ ALSA = getALSAFromTIC(path_to_U4_tIc,startTimes,window_ms,En,recObj.samplingFreq
 
 %   plot raw, FD and hilbert   %
 singleChannel=100; 
-linesWidths=1;
-scaleBarWidth=0.5;
-%%%
-f=figure;
-h(1)=plot(time,squeeze(data(singleChannel,1,:)),'Color',0.7*[1 1 1],'LineWidth',linesWidths);
-hold on
-h(2)=plot(time,squeeze(FD(singleChannel,1,:)),'b','LineWidth',linesWidths);
-plot([50,50],[100,150],'b','LineWidth',scaleBarWidth) %scale bar
-add2phase=-abs(min(data(singleChannel,1,:)))-max(squeeze(HTangle(singleChannel,1,:))*10)-5;
-h(3)=plot(time,squeeze(HTangle(singleChannel,1,:))*10+add2phase,'Color',[0 0.9 0],'LineWidth',linesWidths);
-add2scalebar=add2phase-abs(min(squeeze(HTangle(singleChannel,1,:))))*10;
-plot([50,50],[add2scalebar+20*pi,add2scalebar+20*pi+2*pi*10],'Color',[0 0.9 0],'LineWidth',scaleBarWidth) %scale bar
-add2HP=+max(data(singleChannel,1,:))+abs(min(squeeze(FD_HP(singleChannel,1,:))))+10;
-h(4)=plot(time,squeeze(FD_HP(singleChannel,1,:))+add2HP,'k','LineWidth',linesWidths);
-singleChannelSpikes=find(binSpikes(singleChannel,:))/recObj.samplingFrequency*1000;
-add2spikes=add2HP+max(squeeze(FD_HP(singleChannel,1,:)))+10;
 
-for i=1:length(singleChannelSpikes)
-   plot([singleChannelSpikes(i) singleChannelSpikes(i)],[add2spikes add2spikes+15],'k','LineWidth',0.7)
-end
-add2alsa = add2spikes + 50;
-h(5) = plot(time, ALSA(singleChannel,:)+add2alsa,'r','LineWidth',linesWidths);
-xlabel('Time [ms]')
-leg=legend(h,{'Unfiltered Data','LP Filtered Data','Hilbert Phase','HP Filtered Data','ALSA'},'Location','north','Orientation','horizontal','NumColumns',5);
-legend('boxoff')
-ylimit=ylim;
-ylim([ylimit(1) add2alsa+155])
-yticks([])
-%manually set legend size cuz its huge
-ax=gca;
-ax.Legend.FontSize=7.5;
-ax.Legend.ItemTokenSize=[5 48];
+single_ch_data = squeeze(data(singleChannel,1,:));
+single_ch_FD = squeeze(FD(singleChannel,1,:));
+single_ch_HT_angle = squeeze(HTangle(singleChannel,1,:));
+single_ch_HP = squeeze(FD_HP(singleChannel,1,:));
+single_ch_bin_spikes = binSpikes(singleChannel,:);
+samplingFrequency = recObj.samplingFrequency;
+single_ch_ALSA = ALSA(singleChannel,:);
+
+
+save([get_wave_analysis_code_base_path() 'precalculated_mats/single_trial_plots_data_signals.mat'],...
+    'singleChannel','time','single_ch_data','single_ch_FD','single_ch_HT_angle','single_ch_HP','single_ch_bin_spikes', ...
+    'samplingFrequency','single_ch_ALSA'...
+    )
 
 %% Latency maps - LPF phase crossings and ALSA
 
