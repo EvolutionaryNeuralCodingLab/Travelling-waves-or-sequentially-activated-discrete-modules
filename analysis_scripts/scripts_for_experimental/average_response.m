@@ -1,9 +1,24 @@
 clear all
 close all
 
-data_paths
+%% load final results for figure
 
-%% Calc (or simply load in next section) avg response
+load([get_wave_analysis_code_base_path() 'precalculated_mats/avg_response_plot_data.mat'],...
+    'time','FDmean','relevantChannels','relevantMaximaTimes','pathChannels','samplingFrequency',...
+    'En','waveChannelsPos'...
+    )
+
+%% Plot avg response filmstrip and channels
+
+plotWaveFD(time,FDmean(:,1,:),relevantChannels,relevantMaximaTimes,pathChannels,samplingFrequency,'scatterSize',45);
+
+% plot filmstrip with scatter on first frame
+flimstripStartEnd=[200 750]*samplingFrequency/1000;
+plotFilmstrip(FDmean(:,1,:),flimstripStartEnd,En,waveChannelsPos,samplingFrequency,'colorbarFontSize',8); 
+
+%% Calculate avg response
+
+data_paths
 
 recObj=binaryRecording(path_to_U4_recording);
 load('layout_100_12x12.mat','En')
@@ -24,10 +39,10 @@ startTimes=trigs(trials);
 [~,time,FDmean,HTmean,HTabsmean,HTanglemean] = getCroppedFD(recObj,startTimes,window_ms,widenBy,band,'returnAVG',1,'trialsInBatch',trialsInBatch);
 save([get_wave_analysis_code_base_path() 'precalculated_mats/avg_response.mat'],'time','FDmean','HTmean','HTabsmean','HTanglemean')
 
-%% Load results from last section
+%% Load results from last section if already calculated
 load([get_wave_analysis_code_base_path() 'precalculated_mats/avg_response.mat'],'time','FDmean','HTmean','HTabsmean','HTanglemean')
 
-%% Find peaks and plot
+%% Find peaks and other calcs for plots
 load('layout_100_12x12.mat','En')
 [crossings,hilbertAmps] = getHilbertCrossings(squeeze(HTabsmean(:,1,:)),squeeze(HTanglemean(:,1,:)));
 crossingType=1;
@@ -51,9 +66,10 @@ end
 
 samplingFrequency=20e3;
 time=(1:size(FDmean,3))/samplingFrequency*1000; %sampling rate of 20kHz
-plotWaveFD(time,FDmean(:,1,:),relevantChannels,relevantMaximaTimes,pathChannels,samplingFrequency,'scatterSize',45);
 
-% plot filmstrip with scatter on first frame
-flimstripStartEnd=[200 750]*samplingFrequency/1000;
-plotFilmstrip(FDmean(:,1,:),flimstripStartEnd,En,waveChannelsPos,samplingFrequency,'colorbarFontSize',8); 
+
+save([get_wave_analysis_code_base_path() 'precalculated_mats/avg_response_plot_data.mat'],...
+    'time','FDmean','relevantChannels','relevantMaximaTimes','pathChannels','samplingFrequency',...
+    'En','waveChannelsPos'...
+    )
 
