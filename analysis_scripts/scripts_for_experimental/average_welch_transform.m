@@ -1,9 +1,22 @@
 clear all
 close all
 
-data_paths
+%% load final results for figure
 
-%% Calc (or simply load in next section) avg response
+load([get_wave_analysis_code_base_path() 'precalculated_mats/avg_welch_transform.mat'],'freqs','meanPxxs','resolutonReqd','nTrials')
+
+%% Plot avg welch transform
+
+%plot average <10Hz freqs
+plot(freqs(1:round(10/resolutonReqd)),10*log10(meanPxxs(1:round(10/resolutonReqd))))
+title(['Trials 1:' num2str(nTrials) ' - AVG Welch Transform'])
+xlabel('Frequency (Hz)')
+ylabel('PSD (dB/Hz)')
+
+
+%% Calc avg welch transform
+
+data_paths
 
 recObj=binaryRecording(path_to_U4_recording);
 load('layout_100_12x12.mat','En')
@@ -45,14 +58,3 @@ end
 meanPxxs=squeeze(mean(squeeze(mean(pxxsSum,2)),2))/nBatches;
 
 save([get_wave_analysis_code_base_path() 'precalculated_mats/avg_welch_transform.mat'],'freqs','meanPxxs','resolutonReqd','nTrials')
-
-%% Load results from last section
-load([get_wave_analysis_code_base_path() 'precalculated_mats/avg_welch_transform.mat'],'freqs','meanPxxs','resolutonReqd','nTrials')
-
-%% Find peaks and plot
-
-%plot average <10Hz freqs
-plot(freqs(1:round(10/resolutonReqd)),10*log10(meanPxxs(1:round(10/resolutonReqd))))
-title(['Trials 1:' num2str(nTrials) ' - AVG Welch Transform'])
-xlabel('Frequency (Hz)')
-ylabel('PSD (dB/Hz)')
