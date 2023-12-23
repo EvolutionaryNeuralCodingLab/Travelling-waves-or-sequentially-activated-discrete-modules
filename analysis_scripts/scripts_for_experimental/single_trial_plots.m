@@ -72,6 +72,18 @@ hold on
 scatter(waveCenterPath(:,1),waveCenterPath(:,2),10,'k')
 
 
+%% Plot raster plot, phase crossing and ALSA
+
+load([get_wave_analysis_code_base_path() 'precalculated_mats/raster_crossings_ALSA_plot_data.mat'],'crossing_mat','hilbert_amps_mat','startEndWave','chNums','ms2samples','binSpikes','relevantALSATimes','relevantChannels')
+
+
+[ch_nums_ordered] = order_channels_by_crossing_times(crossing_mat,startEndWave,1:120);
+[rel_ch_nums_ordered,ia,ib] = intersect(relevantChannels,ch_nums_ordered,'stable');
+
+plotSingleHilbertCrossing(crossing_mat,hilbert_amps_mat,0,'',1,'Spikes',binSpikes,'plotLegend',false,'timeInms',1,'sample2ms',1/ms2samples,'sz',5,'order',ch_nums_ordered);
+hold on
+plot(relevantALSATimes(ia)/ms2samples,rel_ch_nums_ordered,'.r','markerSize',6) %6 is the default, and is the size defined for spike in plotSingleHilbertCrossing
+
 %% U4 trial 17 calculations - load for all calcualtions
 
 data_paths
